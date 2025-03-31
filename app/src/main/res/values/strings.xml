@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">geo</string>
+    <string name="mapa">mapa</string>
+    <string name="locate">lokalizuj</string>
+    <string name="beacon_monitoring">Monitoring beaconów…</string>
+    <string name="scan_stop">Zatrzymaj skanowanie</string>
+    <string name="scanning_stopped">Skanowanie zatrzymane</string>
+    <string name="no_beacons_detected">Brak wykrytych beaconów</string>
+    <string name="monitoring_started">Rozpoczęto monitorowanie</string>
+    <string name="monitoring_error">Błąd podczas monitorowanie</string>
+    <string name="beacon_detected">Wykryto beacon:\nID1: %1$s</string>
+    <string name="title_activity_maps">MapsActivity</string>
+</resources>
