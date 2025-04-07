@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.osmdroid.android)
     implementation(libs.play.services.maps)
+    implementation(libs.androidx.preference.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

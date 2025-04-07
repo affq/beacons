@@ -2,7 +2,7 @@ package pl.ad.geo.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,12 +28,6 @@ class MapActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_map)
 
-        window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                )
-
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
         Configuration.getInstance().load(applicationContext, getSharedPreferences("osmdroid", MODE_PRIVATE))
@@ -43,28 +37,30 @@ class MapActivity : AppCompatActivity() {
         map.setMultiTouchControls(true)
 
         val startPositioningButton = findViewById<Button>(R.id.start_positioning)
-        startPositioningButton.setOnClickListener{
-            startActivity(Intent(this, MonitoringActivity::class.java).apply {
-            })
+
+        val intent = Intent(this, MonitoringActivity::class.java)
+        val currentCenter = map.getMapCenter()
+        val currentZoomLevel = map.getZoomLevel()
+
+        intent.putExtra("EXTRA_START_LATITUDE", currentCenter.latitude)
+        intent.putExtra("EXTRA_START_LONGITUDE", currentCenter.longitude)
+        intent.putExtra("EXTRA_START_ZOOM", currentZoomLevel)
+
+        Log.d("MapActivity_Debug", "WYSYŁANE -> Lat: ${currentCenter.latitude}, Lon: ${currentCenter.longitude}, Zoom: $currentZoomLevel") // <--- WAŻNY LOG
+
+        startPositioningButton.setOnClickListener {
+            startActivity(intent)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume() //needed for compass, my location overlays, v6.0.0 and up
+        map.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        map.onPause()  //needed for compass, my location overlays, v6.0.0 and up
+        map.onPause()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -82,21 +78,4 @@ class MapActivity : AppCompatActivity() {
                 REQUEST_PERMISSIONS_REQUEST_CODE)
         }
     }
-
-    /*private fun requestPermissionsIfNecessary(String[] permissions) {
-    val permissionsToRequest = ArrayList<String>();
-    permissions.forEach { permission ->
-    if (ContextCompat.checkSelfPermission(this, permission)
-            != PackageManager.PERMISSION_GRANTED) {
-        // Permission is not granted
-        permissionsToRequest.add(permission);
-    }
-}
-    if (permissionsToRequest.size() > 0) {
-        ActivityCompat.requestPermissions(
-                this,
-                permissionsToRequest.toArray(new String[0]),
-                REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-}*/
 }

@@ -1,16 +1,14 @@
 package pl.ad.geo.common.utils
 
-import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.altbeacon.beacon.Beacon
 import pl.ad.geo.data.model.ReferenceBeacon
 import pl.ad.geo.data.model.UserPosition
 
-interface PositioningUtils{
+interface PositioningUtils {
     suspend fun determineUserPosition(
         detectedBeacons: List<Beacon>,
-        referenceBeacons: Map<String, ReferenceBeacon>):UserPosition?
+        referenceBeacons: Map<String, ReferenceBeacon>
+    ): UserPosition?
 }
 
 class PositioningUtilsImpl : PositioningUtils {
@@ -21,15 +19,16 @@ class PositioningUtilsImpl : PositioningUtils {
     override suspend fun determineUserPosition(
         detectedBeacons: List<Beacon>,
         referenceBeacons: Map<String, ReferenceBeacon>
-    ): UserPosition? = withContext(Dispatchers.IO) {
-    val matchingBeacons: List<Pair<ReferenceBeacon, Beacon>> = detectedBeacons.mapNotNull{
-        detectedBeacon -> referenceBeacons[detectedBeacon.bluetoothAddress]?.let {
-            referenceBeacon -> referenceBeacon to detectedBeacon
-        }
-    }
+    ): UserPosition? {
 
-        if (matchingBeacons.isEmpty()){
-            return@withContext null
+        val matchingBeacons: List<Pair<ReferenceBeacon, Beacon>> = detectedBeacons.mapNotNull { detectedBeacon ->
+            referenceBeacons[detectedBeacon.bluetoothAddress]?.let { referenceBeacon ->
+                referenceBeacon to detectedBeacon
+            }
+        }
+
+        if (matchingBeacons.isEmpty()) {
+            return null
         }
 
         val nearestBeacons = matchingBeacons
@@ -48,13 +47,16 @@ class PositioningUtilsImpl : PositioningUtils {
             sumWeights += weight
         }
 
-        if (sumWeights == 0.0) return@withContext null
+        if (sumWeights == 0.0) {
+            return null
+        }
+
         val userLatitude = sumLat / sumWeights
         val userLongitude = sumLon / sumWeights
 
-        return@withContext UserPosition(
+        return UserPosition(
             latitude = userLatitude,
             longitude = userLongitude
         )
-}
+    }
 }

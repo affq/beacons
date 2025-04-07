@@ -10,7 +10,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -18,18 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import pl.ad.geo.R
 import pl.ad.geo.common.receivers.ConnectivityStateReceiver
-import pl.ad.geo.common.utils.JsonUtils
-import pl.ad.geo.data.model.ReferenceBeacon
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var connectivityReceiver: ConnectivityStateReceiver
-
-    private val referenceBeacons: Map<Int, ReferenceBeacon> by lazy {
-        JsonUtils.loadBeacons(this).also {
-            Log.d("BeaconLoad", "Wczytano ${it.size} beaconów referencyjnych")
-        }
-    }
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -48,16 +39,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (referenceBeacons.isEmpty()) {
-            Toast.makeText(
-                this,
-                "Błąd podczas wczytywania beaconów referencyjnych!",
-                Toast.LENGTH_LONG
-            ).show()
-            finish()
-            return
-        }
 
         initializeConnectivityReceiver()
         requestRequiredPermissions()
@@ -170,12 +151,7 @@ class MainActivity : AppCompatActivity() {
     private fun startBeaconMonitoring() {
         Toast.makeText(this, "Rozpoczynanie monitorowania beaconów...", Toast.LENGTH_SHORT).show()
 
-        val beaconList = ArrayList(referenceBeacons.values.toList())
-        startActivity(Intent(this, MapActivity::class.java).apply {
-            putParcelableArrayListExtra("REFERENCE_BEACONS", beaconList)
-        })
-
-        finish()
+        startActivity(Intent(this, MapActivity::class.java))
     }
 
     private fun showConnectionWarning() {
