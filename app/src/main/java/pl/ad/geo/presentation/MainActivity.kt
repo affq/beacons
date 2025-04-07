@@ -19,13 +19,13 @@ import androidx.core.content.ContextCompat
 import pl.ad.geo.R
 import pl.ad.geo.common.receivers.ConnectivityStateReceiver
 import pl.ad.geo.common.utils.JsonUtils
-import pl.ad.geo.data.Beacon
+import pl.ad.geo.data.model.ReferenceBeacon
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var connectivityReceiver: ConnectivityStateReceiver
 
-    private val referenceBeacons: Map<Int, Beacon> by lazy {
+    private val referenceBeacons: Map<Int, ReferenceBeacon> by lazy {
         JsonUtils.loadBeacons(this).also {
             Log.d("BeaconLoad", "Wczytano ${it.size} beaconów referencyjnych")
         }
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Rozpoczynanie monitorowania beaconów...", Toast.LENGTH_SHORT).show()
 
         val beaconList = ArrayList(referenceBeacons.values.toList())
-        startActivity(Intent(this, MonitoringActivity::class.java).apply {
+        startActivity(Intent(this, MapActivity::class.java).apply {
             putParcelableArrayListExtra("REFERENCE_BEACONS", beaconList)
         })
 

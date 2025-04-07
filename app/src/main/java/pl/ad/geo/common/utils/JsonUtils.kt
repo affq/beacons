@@ -2,11 +2,11 @@ package pl.ad.geo.common.utils
 
 import android.content.Context
 import android.util.Log
-import pl.ad.geo.data.Beacon
+import pl.ad.geo.data.model.ReferenceBeacon
 import org.json.JSONObject
 
 object JsonUtils {
-    fun loadBeacons(context: Context, fileName: String = "beacons.json"): Map<Int, Beacon> {
+    fun loadBeacons(context: Context, fileName: String = "beacons.json"): Map<Int, ReferenceBeacon> {
         return try {
             context.assets.open(fileName).use { inputStream ->
                 val jsonString = inputStream.bufferedReader().use { it.readText() }
@@ -18,12 +18,12 @@ object JsonUtils {
         }
     }
 
-    private fun parseBeaconJson(jsonString: String): Map<Int, Beacon> {
+    private fun parseBeaconJson(jsonString: String): Map<Int, ReferenceBeacon> {
         val json = JSONObject(jsonString)
         val beaconsArray = json.getJSONArray("items")
         return (0 until beaconsArray.length()).associate { i ->
             val beaconJson = beaconsArray.getJSONObject(i)
-            Beacon(
+            ReferenceBeacon(
                 id = beaconJson.getInt("id"),
                 longitude = beaconJson.getDouble("longitude"),
                 latitude = beaconJson.getDouble("latitude"),

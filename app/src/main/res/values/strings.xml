@@ -10,4 +10,5 @@
     <string name="monitoring_error">Błąd podczas monitorowanie</string>
     <string name="beacon_detected">Wykryto beacon:\nID1: %1$s</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="start_positioning">Rozpocznij pozycjonowanie</string>
 </resources>

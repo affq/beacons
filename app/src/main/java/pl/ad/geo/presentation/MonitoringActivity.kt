@@ -5,11 +5,14 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.BeaconParser
 import org.altbeacon.beacon.Region
 import pl.ad.geo.R
-import pl.ad.geo.data.Beacon
+import pl.ad.geo.common.utils.PositioningUtils
+import pl.ad.geo.common.utils.PositioningUtilsImpl
+import pl.ad.geo.data.model.ReferenceBeacon
 
 class MonitoringActivity : AppCompatActivity() {
 
@@ -21,7 +24,7 @@ class MonitoringActivity : AppCompatActivity() {
         setContentView(R.layout.activity_monitoring)
 
         val referenceBeacons = intent
-            .getParcelableArrayListExtra<Beacon>("REFERENCE_BEACONS")
+            .getParcelableArrayListExtra<ReferenceBeacon>("REFERENCE_BEACONS")
             ?.associateBy { it.id } ?: emptyMap()
 
         setUpBeaconManager()

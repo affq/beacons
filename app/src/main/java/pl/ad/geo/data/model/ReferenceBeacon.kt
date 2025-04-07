@@ -1,10 +1,10 @@
-package pl.ad.geo.data
+package pl.ad.geo.data.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Beacon (
+data class ReferenceBeacon (
     val id: Int,
     val longitude: Double,
     val latitude: Double,

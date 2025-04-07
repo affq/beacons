@@ -1,9 +1,13 @@
 package pl.ad.geo.presentation
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import pl.ad.geo.R
 
@@ -13,13 +17,36 @@ class MapActivity : AppCompatActivity() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     private lateinit var map : MapView
 
+    companion object {
+        const val START_LONGITUDE = 21.01178
+        const val START_LATITUDE = 52.22977
+        const val START_ZOOM = 15
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_map)
 
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                )
+
         map = findViewById(R.id.map)
-        map.setTileSource(TileSourceFactory.WIKIMEDIA)
+        map.setTileSource(TileSourceFactory.MAPNIK)
+        Configuration.getInstance().load(applicationContext, getSharedPreferences("osmdroid", MODE_PRIVATE))
+        map.controller.setZoom(START_ZOOM)
+        val startPoint = org.osmdroid.util.GeoPoint(START_LATITUDE, START_LONGITUDE)
+        map.controller.setCenter(startPoint)
+        map.setMultiTouchControls(true)
+
+        val startPositioningButton = findViewById<Button>(R.id.start_positioning)
+        startPositioningButton.setOnClickListener{
+            startActivity(Intent(this, MonitoringActivity::class.java).apply {
+            })
+        }
     }
 
     override fun onResume() {
