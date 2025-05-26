@@ -50,10 +50,11 @@ dependencies {
     implementation(libs.google.play.services.location)
     implementation(libs.android.beacon.library)
     implementation(libs.gson)
-    implementation(libs.osmdroid.android)
     implementation(libs.play.services.maps)
     implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.ui.graphics.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.arcgis.maps.kotlin)
 }

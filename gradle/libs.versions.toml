@@ -1,7 +1,7 @@
 [versions]
 agp = "8.8.2"
-kotlin = "1.9.24"
-coreKtx = "1.15.0"
+kotlin = "2.1.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -12,10 +12,11 @@ constraintlayout = "2.2.1"
 playServicesLocation = "21.3.0"
 androidBeaconLibrary = "2.19.4"
 gson = "2.12.1"
-osmdroidAndroid = "6.1.20"
 googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
-playServicesMaps = "19.1.0"
+playServicesMaps = "19.2.0"
 preferenceKtx = "1.2.1"
+arcgisMapsKotlin = "200.7.0"
+uiGraphicsAndroid = "1.8.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,8 +31,9 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 google-play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 android-beacon-library = { group = "org.altbeacon", name = "android-beacon-library", version.ref = "androidBeaconLibrary" }
 gson = { group = "com.google.code.gson", name="gson", version.ref= "gson"}
-osmdroid-android = { group = "org.osmdroid", name = "osmdroid-android", version.ref = "osmdroidAndroid" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+arcgis-maps-kotlin = { group = "com.esri", name = "arcgis-maps-kotlin", version.ref = "arcgisMapsKotlin" }
+androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
