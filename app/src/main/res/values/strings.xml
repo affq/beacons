@@ -12,4 +12,5 @@
     <string name="start_positioning">Rozpocznij pozycjonowanie</string>
     <string name="stop_positioning">Zatrzymaj pozycjonowanie</string>
     <string name="waiting_for_position">Oczekiwanie na pozycję...</string>
+    <string name="start_comparison">Rozpocznij porównanie (GPS i beacon)</string>
 </resources>

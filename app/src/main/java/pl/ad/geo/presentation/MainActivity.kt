@@ -7,14 +7,19 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.arcgismaps.data.ServiceFeatureTable
+import com.arcgismaps.mapping.ArcGISMap
+import com.arcgismaps.mapping.layers.FeatureLayer
 import pl.ad.geo.R
 import pl.ad.geo.common.receivers.ConnectivityStateReceiver
 
@@ -38,10 +43,25 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.activity_main)
 
         initializeConnectivityReceiver()
         requestRequiredPermissions()
+
+        findViewById<Button>(R.id.btnStartMonitoring).setOnClickListener {
+            startMapActivity(MapMode.MONITORING)
+        }
+
+        findViewById<Button>(R.id.btnStartComparison).setOnClickListener {
+            startMapActivity(MapMode.COMPARISON)
+        }
+    }
+
+    private fun startMapActivity(mode: MapMode) {
+        val intent = Intent(this, MapActivity::class.java).apply {
+            putExtra("map_mode", mode.name)
+        }
+        startActivity(intent)
     }
 
     override fun onStart() {
@@ -63,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     private fun initializeConnectivityReceiver() {
         connectivityReceiver = ConnectivityStateReceiver(
             this,
-            connectionReadyCallback = { startBeaconMonitoring() },
+            connectionReadyCallback = { showConnectionReadyToast() },
             connectionNotReadyCallback = { showConnectionWarning() }
         )
     }
@@ -102,7 +122,7 @@ class MainActivity : AppCompatActivity() {
             !bluetoothManager.adapter.isEnabled ->
                 showBluetoothEnableDialog()
 
-            else -> startBeaconMonitoring()
+            else -> showConnectionReadyToast()
         }
     }
 
@@ -148,17 +168,15 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun startBeaconMonitoring() {
-        Toast.makeText(this, "Rozpoczynanie monitorowania beaconów...", Toast.LENGTH_SHORT).show()
-
-        startActivity(Intent(this, MapActivity::class.java))
-    }
-
     private fun showConnectionWarning() {
         Toast.makeText(
             this,
             "Wymagane usługi lokalizacji i Bluetooth!",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    private fun showConnectionReadyToast() {
+        Toast.makeText(this, "Wszystko gotowe! Możesz rozpocząć pracę z mapą.", Toast.LENGTH_SHORT).show()
     }
 }
