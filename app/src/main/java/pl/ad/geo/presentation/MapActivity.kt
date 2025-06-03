@@ -190,18 +190,21 @@ class MapActivity : AppCompatActivity() {
                 currentBeaconLon = userPosition.longitude
 
                 val text = "Lat: ${"%.6f".format(userPosition.latitude)}, Lon: ${"%.6f".format(userPosition.longitude)}"
+
                 runOnUiThread {
                     positionTextView.text = text
                     updateUserMarker(userPosition.latitude, userPosition.longitude)
+                    Log.d("COMPARE", "✅ Zaktualizowano pozycję z beaconów: $text")
                 }
             } else {
                 runOnUiThread {
-                    positionTextView.text = "Nie można obliczyć pozycji"
-                    removeUserMarker()
+                    Log.d("COMPARE", "⚠️ Brak pozycji z beaconów w tej iteracji – używamy poprzednich.")
                 }
             }
+
         }
     }
+
 
     private fun updateUserMarker(lat: Double, lon: Double) {
         val overlay = mapView.graphicsOverlays.firstOrNull() ?: GraphicsOverlay().also {
@@ -254,9 +257,9 @@ class MapActivity : AppCompatActivity() {
         startMonitoringBeacons()
 
         lifecycleScope.launch {
-            repeat(15) {
+            repeat(60) {
                 if (!isComparisonRunning) return@launch
-                delay(2000)
+                delay(1000)
 
                 comparisonSamples.add(
                     PositionSample(
@@ -283,7 +286,7 @@ class MapActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         val locationRequest = LocationRequest.create().apply {
-            interval = 2000
+            interval = 1000
             fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
@@ -324,6 +327,8 @@ class MapActivity : AppCompatActivity() {
         }
 
         val top5 = distances.sortedByDescending { it.third }.take(5)
+        //TODO: ogarnąć, żeby te same pary się nie wyświetlały 2 razy (bo wtedy wygląda jakby było mniej punktów)
+        Log.d("COMPARE", "Liczba próbek do analizy: ${distances.size}")
         val overlay = GraphicsOverlay()
         mapView.graphicsOverlays.clear()
         mapView.graphicsOverlays.add(overlay)
