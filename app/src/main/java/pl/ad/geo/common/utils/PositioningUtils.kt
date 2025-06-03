@@ -1,5 +1,6 @@
 package pl.ad.geo.common.utils
 
+import android.util.Log
 import org.altbeacon.beacon.Beacon
 import pl.ad.geo.data.model.ReferenceBeacon
 import pl.ad.geo.data.model.UserPosition
@@ -20,6 +21,13 @@ class PositioningUtilsImpl : PositioningUtils {
         detectedBeacons: List<Beacon>,
         referenceBeacons: Map<String, ReferenceBeacon>
     ): UserPosition? {
+
+
+        for (beacon in detectedBeacons) {
+            Log.d("DETERMINEUSERPOS", "Beacon ID: ${beacon.bluetoothAddress}")
+        }
+
+        Log.d("DETERMINEUSERPOS", "Reference beacon keys: ${referenceBeacons.keys}")
 
         val matchingBeacons: List<Pair<ReferenceBeacon, Beacon>> = detectedBeacons.mapNotNull { detectedBeacon ->
             referenceBeacons[detectedBeacon.bluetoothAddress]?.let { referenceBeacon ->

@@ -186,6 +186,9 @@ class MapActivity : AppCompatActivity() {
                 positioningUtils.determineUserPosition(beacons, referenceBeacons)
 
             if (userPosition != null) {
+                currentBeaconLat = userPosition.latitude
+                currentBeaconLon = userPosition.longitude
+
                 val text = "Lat: ${"%.6f".format(userPosition.latitude)}, Lon: ${"%.6f".format(userPosition.longitude)}"
                 runOnUiThread {
                     positionTextView.text = text
@@ -268,6 +271,7 @@ class MapActivity : AppCompatActivity() {
 
             stopMonitoring()
             stopGpsListener()
+            Log.d("Comparison", "Comparison samples: $comparisonSamples")
             isComparisonRunning = false
             positionTextView.text = "Analiza danych..."
 
